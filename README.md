@@ -33,11 +33,18 @@ npx create-turbo@latest
 
 ## 🌐 Live Architecture Overview
 
+```mermaid
 flowchart TD
-    A[Frontend - Next.js Canvas] -- WebSocket --> B[WS Backend - Realtime Updates]
-    A -- REST --> C[HTTP Backend - Prisma + Express]
-    B -- DB Queries --> C
-    C -- Prisma --> D[(PostgreSQL Database)]
+
+A[Frontend - Next.js Canvas] -- WebSocket --> B[WS Backend - Realtime Updates]
+
+A -- REST --> C[HTTP Backend - Prisma + Express]
+
+B -- DB Queries --> C
+
+C -- Prisma --> D[(PostgreSQL Database)]
+```
+
 
 
 ## 🏗️ Project Structure
