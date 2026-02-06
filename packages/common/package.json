@@ -1,0 +1,23 @@
+{
+  "name": "@repo/common",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+   "scripts": {
+    "build": "tsc -b"
+  },
+
+  "exports": {
+    "./types": "./dist/index.js"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+    
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

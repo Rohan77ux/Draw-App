@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  name          String
+  photo         String?
+  chats         Chat[]
+  rooms         Room[]         @relation("UserRooms") // admin-created rooms
+  collaborators Collaborator[]
+}
+
+model Room {
+  id        String   @id @default(uuid()) // UUID room ID
+  slug      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+
+  adminId String
+  admin   User   @relation("UserRooms", fields: [adminId], references: [id], onDelete: Cascade)
+
+  chats         Chat[]
+  collaborators Collaborator[]
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  message   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Collaborator {
+  id     String @id @default(uuid())
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+}
