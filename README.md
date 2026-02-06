@@ -40,21 +40,24 @@ flowchart TD
     C -- Prisma --> D[(PostgreSQL Database)]
 
 
-### 🏗️ Project Structure
+## 🏗️ Project Structure
 
+```text
 .
-├── apps/
-│   ├── frontend/          → Next.js 15 collaborative canvas UI
-│   ├── http-backend/      → Express API (Prisma CRUD)
-│   ├── ws-backend/        → WebSocket real-time sync server
-│
-├── packages/
-│   ├── db/                → Prisma schema + generated client
-│   ├── ui/                → Shared UI components
-│   ├── backend-common/    → Shared env + constants + JWT secret
-│
-├──     
+├── apps
+│   ├── frontend        → Next.js 15 collaborative canvas UI
+│   ├── http-backend    → Express API (Prisma CRUD)
+│   └── ws-backend      → WebSocket real-time sync server
+
+├── packages
+│   ├── db              → Prisma schema + generated client
+│   ├── ui              → Shared UI components
+│   └── backend-common  → Shared env + constants + JWT secret
 └── turbo.json
+
+
+```
+
 
 
 
