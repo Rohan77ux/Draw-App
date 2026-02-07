@@ -63,7 +63,7 @@ export function AuthPage({
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Already have an account?{" "}
               <a
-                href="/signin"
+                href="/login"
                 className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline"
               >
                 Sign in
@@ -105,7 +105,7 @@ export function AuthPage({
                   label="First Name"
                   type="text"
                   icon={<UserCircle2 className="h-5 w-5 text-slate-400" />}
-                  placeholder="Nitin"
+                  placeholder="Prakash"
                 />
 
                 <InputField
@@ -113,7 +113,7 @@ export function AuthPage({
                   label="Last Name"
                   type="text"
                   icon={<UserCircle2 className="h-5 w-5 text-slate-400" />}
-                  placeholder="Gupta"
+                  placeholder="title"
                 />
               </>
             )}
