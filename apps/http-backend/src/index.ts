@@ -1,5 +1,3 @@
-console.log("DATABASE_URL =", process.env.DATABASE_URL ? "FOUND" : "MISSING");
-
 import express, { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
@@ -20,7 +18,7 @@ app.use(
     origin: "http://localhost:3000",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 // Signup Route
@@ -266,7 +264,7 @@ app.post(
 
     res.json({ message: "Collaborator added successfully" });
     return;
-  }
+  },
 );
 
 app.get(
@@ -306,10 +304,10 @@ app.get(
 
     // Block everyone else
     res.status(403).json({ message: "Forbidden" });
-  }
+  },
 );
 
 // Start server
 app.listen(4000, () =>
-  console.log("Server is running on http://localhost:4000")
+  console.log("Server is running on http://localhost:4000"),
 );

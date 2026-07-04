@@ -1,3 +1,4 @@
+// @ts-expect-error CSS modules are handled by the bundler.
 import "./globals.css";
 
 export default function RootLayout({

@@ -13,17 +13,17 @@ export function AuthPage({
   loading: boolean;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-white/70 via-gray-100/50 to-slate-200 dark:from-slate-900 dark:via-slate-950 dark:to-black transition-all">
-      {/* Floating Gradient Blurs (Premium Effect) */}
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#f6f1eb]">
+      {/* Floating Warm Blurs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="absolute -top-32 -left-32 w-80 h-80 rounded-full
-        bg-gradient-to-br from-indigo-400/40 to-violet-500/40 blur-3xl dark:opacity-30"
+        bg-gradient-to-br from-orange-200/40 to-orange-300/40 blur-3xl"
         />
 
         <div
           className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full
-        bg-gradient-to-br from-indigo-600/40 to-emerald-400/40 blur-3xl opacity-40 dark:opacity-20"
+        bg-gradient-to-br from-orange-300/30 to-orange-200/30 blur-3xl opacity-40"
         />
       </div>
 
@@ -40,31 +40,31 @@ export function AuthPage({
             animate={{ scale: 1 }}
             transition={{ duration: 0.3 }}
             className="flex items-center justify-center w-16 h-16 rounded-2xl 
-            bg-gradient-to-br from-indigo-600 to-violet-600 shadow-xl shadow-indigo-500/30"
+            bg-[#e07a5f] shadow-xl shadow-orange-300/30"
           >
             <User className="w-8 h-8 text-white" />
           </motion.div>
 
-          <h1 className="mt-6 text-3xl font-bold text-slate-900 dark:text-slate-100">
+          <h1 className="mt-6 text-3xl font-bold text-[#1f2937]">
             {isSignin ? "Welcome Back" : "Create Your Account"}
           </h1>
 
           {isSignin ? (
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            <p className="mt-2 text-sm text-gray-600">
               Don’t have an account?{" "}
               <a
                 href="/signup"
-                className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline"
+                className="text-[#e07a5f] font-medium hover:underline"
               >
                 Create one
               </a>
             </p>
           ) : (
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            <p className="mt-2 text-sm text-gray-600">
               Already have an account?{" "}
               <a
                 href="/login"
-                className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline"
+                className="text-[#e07a5f] font-medium hover:underline"
               >
                 Sign in
               </a>
@@ -74,9 +74,8 @@ export function AuthPage({
 
         {/* Card */}
         <div
-          className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl border 
-        border-white/40 dark:border-slate-800 shadow-2xl shadow-black/10 
-        dark:shadow-none rounded-2xl px-8 py-10"
+          className="bg-[#fbf7f2] backdrop-blur-xl border 
+        border-[#eee6dc] shadow-2xl shadow-black/5 rounded-2xl px-8 py-10"
         >
           <form onSubmit={handle} className="space-y-6">
             {/* Email */}
@@ -84,7 +83,7 @@ export function AuthPage({
               id="email"
               label="Email address"
               type="email"
-              icon={<Mail className="h-5 w-5 text-slate-400" />}
+              icon={<Mail className="h-5 w-5 text-gray-400" />}
               placeholder="you@example.com"
             />
 
@@ -93,7 +92,7 @@ export function AuthPage({
               id="password"
               label="Password"
               type="password"
-              icon={<Lock className="h-5 w-5 text-slate-400" />}
+              icon={<Lock className="h-5 w-5 text-gray-400" />}
               placeholder="••••••••"
             />
 
@@ -104,16 +103,16 @@ export function AuthPage({
                   id="firstName"
                   label="First Name"
                   type="text"
-                  icon={<UserCircle2 className="h-5 w-5 text-slate-400" />}
-                  placeholder="Prakash"
+                  icon={<UserCircle2 className="h-5 w-5 text-gray-400" />}
+                  placeholder="first name"
                 />
 
                 <InputField
                   id="lastName"
                   label="Last Name"
                   type="text"
-                  icon={<UserCircle2 className="h-5 w-5 text-slate-400" />}
-                  placeholder="title"
+                  icon={<UserCircle2 className="h-5 w-5 text-gray-400" />}
+                  placeholder="last name"
                 />
               </>
             )}
@@ -123,9 +122,8 @@ export function AuthPage({
               type="submit"
               whileTap={{ scale: 0.97 }}
               className="w-full flex justify-center items-center gap-2 px-4 py-3 rounded-xl
-              bg-gradient-to-br from-indigo-600 to-violet-600 text-white 
-              font-medium shadow-lg shadow-indigo-500/20 hover:brightness-105 
-              transition-all"
+              bg-[#e07a5f] text-white font-medium shadow-lg shadow-orange-300/30 
+              hover:bg-[#d96d51] transition-all"
             >
               {loading ? (
                 <motion.div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -144,7 +142,7 @@ export function AuthPage({
 }
 
 /* ------------------------------------------ */
-/*           Premium Input Component           */
+/*               Input Component              */
 /* ------------------------------------------ */
 
 function InputField({
@@ -162,10 +160,7 @@ function InputField({
 }) {
   return (
     <div className="space-y-1.5">
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-slate-700 dark:text-slate-200"
-      >
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
 
@@ -181,10 +176,9 @@ function InputField({
           placeholder={placeholder}
           required
           className="w-full pl-10 pr-3 py-2.5 text-[15px] rounded-xl outline-none
-          bg-white/70 dark:bg-slate-800/60 border border-slate-300/70 dark:border-slate-700
-          text-slate-900 dark:text-slate-100
-          focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm
-          dark:focus:ring-indigo-400 transition-all"
+          bg-white border border-gray-300 text-gray-900
+          focus:ring-2 focus:ring-[#e07a5f] focus:border-[#e07a5f]
+          shadow-sm transition-all"
         />
       </div>
     </div>

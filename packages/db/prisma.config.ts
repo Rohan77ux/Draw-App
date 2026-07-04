@@ -2,6 +2,10 @@
 // npm install --save-dev prisma dotenv
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
+// Provide a minimal declaration for `process` to satisfy TypeScript in environments
+// where @types/node is not installed.
+declare const process: { env: { DATABASE_URL?: string } };
+/// <reference types="node" />
 
 export default defineConfig({
   schema: "prisma/schema.prisma",

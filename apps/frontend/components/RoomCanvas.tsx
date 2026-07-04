@@ -1,21 +1,28 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { WS_URl } from "@/config";
-import { Canvas } from "./Canvas";
+import { useEffect, useState } from "react";
+import { WS_URL } from "@/config"; // ✅ fixed
+import { Canvas } from "@/components/Canvas";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function RoomCanvas({ roomId }: { roomId: string }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const router = useRouter();
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     if (!roomId) return;
 
-    const token = localStorage.getItem("Authorization");
-    if (!token) return console.error("❌ No token found!");
+    setSocket(null);
 
-    const ws = new WebSocket(`${WS_URl}?token=${token}`);
+    const token = localStorage.getItem("Authorization");
+    if (!token) {
+      console.error("❌ No token found! Redirecting to login.");
+      router.push("/login");
+      return;
+    }
+
+    const ws = new WebSocket(`${WS_URL}?token=${token}`);
 
     ws.onopen = () => {
       console.log(`🎉 Connected. Joining room: ${roomId}`);
@@ -24,15 +31,17 @@ export default function RoomCanvas({ roomId }: { roomId: string }) {
     };
 
     ws.onerror = (err) => console.error("❌ WebSocket Error:", err);
+    ws.onclose = () =>
+      setSocket((current) => (current === ws ? null : current));
 
     return () => ws.close();
-  }, [roomId]);
+  }, [roomId, router]);
 
   if (!socket) {
     return (
       <div
         className="h-screen flex items-center justify-center bg-gradient-to-br 
-      from-gray-100 via-white to-gray-200 dark:from-slate-900 dark:via-black dark:to-slate-950"
+        from-gray-100 via-white to-gray-200 dark:from-slate-900 dark:via-black dark:to-slate-950"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
