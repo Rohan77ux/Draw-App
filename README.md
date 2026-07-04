@@ -1,135 +1,214 @@
-# Turborepo starter
+# 🎨 Draw App — Real-Time Collaborative Whiteboard
 
-This Turborepo starter is maintained by the Turborepo core team.
+A real-time collaborative drawing app inspired by Excalidraw, built with **Next.js**, **WebSockets**, **Express**, **Prisma**, and **Turborepo**. Multiple people can sketch, brainstorm, and design together on the same canvas — with persistent storage, live sync, and an editor experience that feels close to a native design tool.
 
-## Using this example
+---
 
-Run the following command:
+## 🚀 Features
 
-```sh
-npx create-turbo@latest
-```
+### ✏️ Drawing Tools
+- Rectangle, Circle, Diamond, Line, Arrow
+- Freehand Pencil
+- Text (click to type, double-click to edit, adjustable font size/alignment/opacity)
+- Image insertion
+- Eraser
 
-## What's inside?
+### 🖱️ Selection & Editing
+- **Click-select** a single shape by its border and resize it with corner handles (aspect-ratio lock with Shift)
+- **Marquee (drag-box) select** — draws a selection box and grabs every shape *fully enclosed* inside it, so you can box-select a whole group (e.g. a big figure plus everything drawn inside it) without accidentally grabbing shapes that only partially overlap the box
+- **Group move** — once a group is marquee-selected, click and drag anywhere inside the group's bounds to move all of them together
+- Shift-click to add/remove individual shapes from a selection
+- Layer reordering (bring forward / send backward) for the active selection
+- Double-click text to edit it in place
 
-This Turborepo includes the following packages/apps:
+### 🧭 Canvas Navigation
+- Zoom in/out with on-screen controls or `Ctrl`/`Cmd` + scroll
+- Pan with the dedicated cursor/hand tool or by scrolling
+- "Zoom to selection" to frame whatever's currently selected
+- Light / dark theme toggle with a matching stroke palette for each
 
-### Apps and Packages
+### ⚡ Real-Time Collaboration
+- WebSocket-powered live drawing sync across all clients in a room
+- Multi-user rooms with JWT-authenticated WebSocket connections
+- Add collaborators to a room by email
+- Access control — rooms enforce who's allowed to join
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 🗄️ Reliable Persistence
+- All shapes are saved to PostgreSQL via Prisma
+- Existing shapes load automatically when you join a room
+- Shape updates (move, resize, edit, reorder) and deletions sync and persist in real time
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### 🧩 Modular Architecture
+- Turborepo-based monorepo with shared packages
+- Clean separation between the frontend, the WebSocket server, and the HTTP API
 
-### Utilities
+---
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 🏗️ Project Structure
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+.
+├── apps
+│   ├── frontend        → Next.js canvas UI (drawing engine, toolbar, rooms)
+│   ├── http-backend    → Express API (Prisma CRUD, auth, room/collaborator management)
+│   └── ws-backend      → WebSocket server for real-time shape sync
+│
+├── packages
+│   ├── db              → Prisma schema + generated client
+│   ├── ui              → Shared UI components
+│   └── backend-common  → Shared env vars, constants, JWT secret
+│
+└── turbo.json
 ```
 
-### Develop
+---
 
-To develop all apps and packages, run the following command:
+## 🌐 Architecture Overview
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```mermaid
+flowchart TD
+    A[Frontend - Next.js Canvas] -- WebSocket --> B[WS Backend - Realtime Sync]
+    A -- REST --> C[HTTP Backend - Express + Prisma]
+    B -- DB Queries --> C
+    C -- Prisma --> D[(PostgreSQL Database)]
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+- The canvas talks to the **WS backend** for live shape create/update/move/erase/reorder events, broadcast to everyone else in the same room.
+- The canvas talks to the **HTTP backend** for auth, room access checks, adding collaborators, and loading existing shapes on join.
+- The **HTTP backend** is the only service that talks to Postgres, through Prisma.
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+---
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+## 📦 Tech Stack
 
-### Remote Caching
+**Frontend**
+- Next.js 15, React 19
+- TypeScript
+- Tailwind CSS
+- HTML5 Canvas API (custom drawing engine — no canvas library)
+- Framer Motion (UI animations)
+- react-hot-toast
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+**Backend**
+- Express.js (HTTP API)
+- `ws` WebSocket server (real-time sync)
+- Prisma ORM
+- PostgreSQL
+- JWT authentication
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+**Tooling**
+- Turborepo
+- pnpm workspaces
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+---
 
-```
-cd my-turborepo
+## 🛠️ Getting Started
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+### Prerequisites
+- Node.js ≥ 18
+- pnpm
+- A running PostgreSQL instance
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
+### 1. Clone & install
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+git clone https://github.com/Rohan77ux/Draw-App.git
+cd Draw-App
+pnpm install
 ```
 
-## Useful Links
+### 2. Configure environment variables
 
-Learn more about the power of Turborepo:
+Each app under `apps/` and the `packages/db` package needs its own `.env`. At minimum you'll need:
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+```bash
+# apps/http-backend/.env & apps/ws-backend/.env
+DATABASE_URL="postgresql://user:password@localhost:5432/drawapp"
+JWT_SECRET="your-secret-key"
+
+# apps/frontend/.env
+NEXT_PUBLIC_HTTP_BACKEND_URL="http://localhost:3001"
+NEXT_PUBLIC_WS_URL="ws://localhost:8080"
+```
+
+> Adjust ports/URLs to match your local setup.
+
+### 3. Set up the database
+
+```bash
+cd packages/db
+pnpm prisma generate
+pnpm prisma migrate dev
+```
+
+### 4. Run the apps (from the repo root)
+
+```bash
+pnpm dev
+```
+
+This uses Turborepo to start the frontend, HTTP backend, and WS backend together. To run a single app instead:
+
+```bash
+pnpm --filter frontend dev
+pnpm --filter http-backend dev
+pnpm --filter ws-backend dev
+```
+
+---
+
+## 💬 WebSocket Message Examples
+
+**Join a room**
+```json
+{
+  "type": "join_room",
+  "roomId": "abc-123"
+}
+```
+
+**Broadcast a new/updated shape**
+```json
+{
+  "type": "chat",
+  "roomId": "abc-123",
+  "message": "{\"shape\": { \"id\": \"...\", \"type\": \"rect\", \"x\": 100, \"y\": 100, \"width\": 200, \"height\": 120, \"color\": \"#1e1e1e\" } }"
+}
+```
+
+**Erase a shape**
+```json
+{
+  "type": "chat",
+  "roomId": "abc-123",
+  "message": "{\"eraseId\": \"shape-id-here\"}"
+}
+```
+
+**Reorder layers**
+```json
+{
+  "type": "reorder",
+  "roomId": "abc-123",
+  "order": ["shape-id-1", "shape-id-2", "shape-id-3"]
+}
+```
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Undo / redo
+- [ ] Explicit shape grouping (persisted parent/child relationships, beyond bounding-box inference)
+- [ ] Live multi-user cursors
+- [ ] Export canvas to PNG/SVG
+
+---
+
+## 🤝 Contributing
+
+Issues and PRs are welcome. If you're adding a new drawing tool or canvas interaction, please keep the shape-sync contract (`shape`, `updateShape`, `eraseId`, `reorder` message types) intact so existing rooms/clients stay compatible.
+
+## 📄 License
+
+No license specified yet — all rights reserved by the author until one is added.
